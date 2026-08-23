@@ -585,14 +585,124 @@ h4 i { filter: drop-shadow(0 2px 4px rgba(124,58,237,0.30)); }
 }
 
 /* ============================================================
-   RESPONSIVE
+   BOTÓN HAMBURGUESA Y OVERLAY (solo móvil)
    ============================================================ */
-@media (max-width: 992px) {
-  .sidebar { width: 64px; min-width: 64px; }
+.menu-toggle {
+  display: none;
+  position: fixed; top: 14px; left: 14px;
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: #fff; border: none;
+  align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: var(--shadow-btn), var(--blue-shadow);
+  cursor: pointer; z-index: 1060;
+  transition: all var(--tr);
+}
+.menu-toggle:hover { transform: translateY(-2px) scale(1.05); }
+.menu-toggle:active { transform: scale(0.92); }
+.menu-toggle i { transition: transform var(--tr); }
+body.menu-open .menu-toggle i { transform: rotate(90deg); }
+
+#sidebar-overlay {
+  position: fixed; inset: 0;
+  background: rgba(30,10,70,0.45);
+  backdrop-filter: blur(3px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.32s ease;
+  z-index: 1045;
+}
+
+/* ============================================================
+   RESPONSIVE — se adapta a cualquier tamaño
+   ≥1200px  sidebar completa
+   992–1199 sidebar compacta
+   768–991  raíl de iconos
+   ≤767     cajón deslizante + hamburguesa
+   ≤575     compacto extra para teléfonos
+   ============================================================ */
+@media (min-width: 768px) {
+  #sidebar-overlay { display: none; }
+}
+
+@media (max-width: 1199px) {
+  :root { --sidebar-w: 200px; }
+}
+
+@media (max-width: 991px) {
+  :root { --sidebar-w: 62px; }
   .sidebar span, .sidebar h6, .sidebar small, .sidebar .btn, #user-role { display: none !important; }
   .sidebar-link { justify-content: center; padding: 10px 8px; margin: 1px 4px; }
   .sidebar-link i { margin: 0 !important; }
   .sidebar-link.active::before { display: none; }
+  .sidebar-link.active { background: rgba(255,255,255,0.22) !important; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
   .sidebar > div:first-child { justify-content: center !important; }
   .theme-toggle { margin-top: 6px; }
 }
+
+@media (max-width: 767px) {
+  /* Cajón lateral */
+  .sidebar {
+    position: fixed; top: 0; bottom: 0; left: 0;
+    width: min(80vw, 270px); min-width: 0;
+    transform: translateX(-110%);
+    transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: none;
+  }
+  body.menu-open .sidebar {
+    transform: translateX(0);
+    box-shadow: 26px 0 60px rgba(30,10,70,0.45);
+  }
+  body.menu-open #sidebar-overlay { opacity: 1; pointer-events: auto; }
+
+  /* Restaurar textos dentro del cajón */
+  .sidebar span, .sidebar small, .sidebar h6, #user-role { display: inline !important; }
+  .sidebar .btn { display: inline-flex !important; }
+  .sidebar-link { justify-content: flex-start; padding: 9px 14px; margin: 2px 10px; gap: 10px; }
+
+  /* Espacio para el botón flotante */
+  .menu-toggle { display: flex; }
+  #app-main .content-area > div { padding-top: 66px !important; }
+
+  /* Tipografía y espaciados */
+  h4.fw-bold { font-size: 18px; }
+  h4.fw-bold i { font-size: 16px; }
+  .stat-number { font-size: 23px; }
+
+  /* Botones de las barras de herramientas reparten el ancho */
+  .d-flex.flex-wrap.gap-2 > .btn { flex: 1 1 auto; justify-content: center; }
+  .d-flex.flex-wrap.gap-2 > .form-select { width: 100% !important; flex: 1 1 150px; }
+}
+
+@media (max-width: 575px) {
+  body { font-size: 12.5px; }
+
+  h4.fw-bold { font-size: 16.5px; }
+  h4.fw-bold.me-2, h4.fw-bold i { font-size: 15px; }
+  .stat-number { font-size: 20px; letter-spacing: -0.3px; }
+  .stat-label { font-size: 9.5px; }
+
+  /* Botones apilados en dos columnas */
+  .d-flex.flex-wrap.gap-2 > .btn { flex: 1 1 calc(50% - 4px); font-size: 11.5px; padding: 6px 8px; }
+  .btn-sm { padding: 6px 10px; font-size: 11.5px; }
+
+  /* Tablas compactas con scroll horizontal */
+  .table th { font-size: 9px; padding: 8px 10px; }
+  .table td { font-size: 11.5px; padding: 7px 10px; }
+
+  /* Tarjetas y filtros más livianos */
+  .card-body { padding: 12px; }
+  .form-label { font-size: 10.5px; }
+
+  /* Modales ajustados al borde */
+  .modal-dialog { margin: 0.5rem; }
+  .modal-header { padding: 12px 16px; }
+  .modal-body { padding: 16px; }
+  .modal-footer { padding: 10px 16px; }
+
+  /* Alertas y login */
+  .alert { font-size: 12px; }
+  #login-view .card { max-width: 100%; }
+}
+

@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initLogin();
   initNav();
+  initMobileMenu();
   initConfigTabs();
   initFilters();
   initActionButtons();
@@ -213,8 +214,24 @@ async function showApp() {
 // ============================================================
 function initNav() {
   document.querySelectorAll('.sidebar-link').forEach(link => {
-    link.addEventListener('click', e => { e.preventDefault(); navigateTo(link.dataset.view); });
+    link.addEventListener('click', e => { e.preventDefault(); navigateTo(link.dataset.view); document.body.classList.remove('menu-open'); syncMenuIcon(); });
   });
+}
+
+function initMobileMenu() {
+  const btn = document.getElementById('menu-toggle');
+  if (!btn) return;
+  btn.addEventListener('click', () => { document.body.classList.toggle('menu-open'); syncMenuIcon(); });
+  document.getElementById('sidebar-overlay')?.addEventListener('click', closeMobileMenu);
+  window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeMobileMenu(); });
+}
+
+function closeMobileMenu() { document.body.classList.remove('menu-open'); syncMenuIcon(); }
+
+function syncMenuIcon() {
+  const i = document.querySelector('#menu-toggle i');
+  if (!i) return;
+  i.className = document.body.classList.contains('menu-open') ? 'bi bi-x-lg' : 'bi bi-list';
 }
 
 function navigateTo(view) {
