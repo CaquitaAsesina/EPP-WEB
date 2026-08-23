@@ -12,40 +12,70 @@
 <body>
 
 <!-- ============ LOGIN ============ -->
-<div id="login-view" class="d-flex justify-content-center align-items-center min-vh-100 p-3">
-  <div class="card" style="max-width:400px;width:100%">
-    <div class="card-body p-4 p-md-5">
-      <div class="text-center mb-4">
-        <div style="width:64px;height:64px;border-radius:16px;background:var(--blue);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px">
-          <i class="bi bi-shield-check text-white" style="font-size:1.8rem"></i>
+<div id="login-view">
+  <div class="login-shell">
+    <aside class="login-brand d-none d-lg-flex">
+      <div class="lb-glow lb-glow-1"></div>
+      <div class="lb-glow lb-glow-2"></div>
+      <div class="lb-logo"><i class="bi bi-shield-check"></i></div>
+      <h2>Inventario EPP</h2>
+      <p class="lb-sub">Sistema de Protección Personal</p>
+      <ul class="lb-features">
+        <li><span class="lb-ico"><i class="bi bi-box-seam"></i></span><div><strong>Stock en tiempo real</strong><small>Disponible, sucio y en lavado</small></div></li>
+        <li><span class="lb-ico"><i class="bi bi-arrow-repeat"></i></span><div><strong>Movimientos trazables</strong><small>Ingresos, entregas y devoluciones</small></div></li>
+        <li><span class="lb-ico"><i class="bi bi-filetype-pdf"></i></span><div><strong>Reportes al instante</strong><small>PDF y Excel con un clic</small></div></li>
+      </ul>
+      <small class="lb-foot"><i class="bi bi-shield-lock me-1"></i>Conexión cifrada · Acceso restringido por roles</small>
+    </aside>
+
+    <main class="login-panel">
+      <div class="login-card">
+        <div class="text-center mb-4">
+          <div class="lc-logo"><i class="bi bi-shield-check"></i></div>
+          <h4 class="fw-bold mb-1 mt-3">Inventario EPP</h4>
+          <small class="lc-tagline">Sistema de Protección Personal</small>
         </div>
-        <h4 class="fw-bold mb-1">Inventario EPP</h4>
-        <small style="color:var(--text3)">Sistema de Protección Personal</small>
-      </div>
-      <div id="login-error" class="alert alert-danger d-none"></div>
-      <form id="login-form">
-        <div class="mb-3">
-          <label class="form-label"><i class="bi bi-person me-1"></i>Usuario</label>
-          <input type="text" class="form-control" id="login-username" placeholder="Ingrese su usuario" required autocomplete="username">
-        </div>
-        <div class="mb-4">
-          <label class="form-label"><i class="bi bi-lock me-1"></i>Contraseña</label>
-          <div class="input-group">
-            <input type="password" class="form-control" id="login-password" placeholder="Ingrese su contraseña" required autocomplete="current-password">
-            <button class="btn btn-outline-secondary" type="button" id="toggle-password">
-              <i class="bi bi-eye"></i>
-            </button>
+        <div id="login-error" class="alert alert-danger d-none"></div>
+        <form id="login-form" novalidate="">
+          <div class="mb-3">
+            <label class="form-label" for="login-username">Usuario</label>
+            <div class="input-icon">
+              <i class="bi bi-person"></i>
+              <input type="text" class="form-control" id="login-username" placeholder="Ingrese su usuario" required autocomplete="username">
+            </div>
           </div>
+          <div class="mb-4">
+            <label class="form-label" for="login-password">Contraseña</label>
+            <div class="input-group pass-group">
+              <span class="input-icon-flat"><i class="bi bi-lock"></i></span>
+              <input type="password" class="form-control border-start-0 ps-0" id="login-password" placeholder="Ingrese su contraseña" required autocomplete="current-password">
+              <button class="btn btn-outline-secondary" type="button" id="toggle-password" tabindex="-1">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 lc-submit">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión
+          </button>
+        </form>
+        <hr class="my-3">
+        <div class="text-center">
+          <small class="lc-hint"><i class="bi bi-info-circle me-1"></i>Usuarios: admin (Admin) / consulta</small>
         </div>
-        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
-          <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión
-        </button>
-      </form>
-      <hr class="my-3">
-      <div class="text-center">
-        <small style="color:var(--text3)"><i class="bi bi-info-circle me-1"></i>Usuarios: admin (Admin) / consulta</small>
       </div>
-    </div>
+    </main>
+  </div>
+
+  <!-- ANIMACIÓN DE ÉXITO -->
+  <div id="login-success" class="d-none">
+    <div class="ls-ring"></div>
+    <div class="ls-burst"></div>
+    <svg class="ls-check" viewBox="0 0 120 120" aria-hidden="true">
+      <circle cx="60" cy="60" r="46"/>
+      <path d="M42 62 L55 74 L80 46"/>
+    </svg>
+    <h5 class="ls-title">¡Bienvenido!</h5>
+    <p class="ls-name" id="ls-name"></p>
   </div>
 </div>
 

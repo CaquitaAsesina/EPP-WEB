@@ -157,6 +157,22 @@ function updateThemeIcon(t) {
   if (i) i.className = t === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
 }
 
+// ---- Animación de bienvenida (solo visual) ----
+function playLoginSuccess(nombre) {
+  return new Promise(resolve => {
+    const el = document.getElementById('login-success');
+    if (!el) return resolve();
+    document.getElementById('ls-name').textContent = nombre || '';
+    el.classList.remove('d-none', 'ls-out');
+    void el.offsetWidth;
+    requestAnimationFrame(() => el.classList.add('ls-in'));
+    setTimeout(() => {
+      el.classList.add('ls-out');
+      setTimeout(() => { el.classList.add('d-none'); el.classList.remove('ls-in', 'ls-out'); resolve(); }, 480);
+    }, 1600);
+  });
+}
+
 // ============================================================
 // AUTH
 // ============================================================
@@ -172,6 +188,7 @@ function initLogin() {
       const r = await API.login(v('login-username'), v('login-password'));
       API.setToken(r.token);
       API.setUser(r.user);
+      await playLoginSuccess(r.user && r.user.nombre);
       showApp();
     } catch (err) {
       errDiv.textContent = err.message;

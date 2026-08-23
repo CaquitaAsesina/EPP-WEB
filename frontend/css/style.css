@@ -355,17 +355,9 @@ nav.sidebar li:nth-child(8) .sidebar-link { animation-delay: 0.24s; }
 [data-theme="dark"] .btn-outline-warning  { color: #d8b4fe !important; border-color: #c084fc !important; }
 [data-theme="dark"] .btn-outline-success  { color: #c4b5fd !important; border-color: #8b5cf6 !important; }
 
-/* Modo oscuro: chips translúcidas y login nocturno */
+/* Modo oscuro: chips translúcidas (el login nocturno vive en su sección) */
 [data-theme="dark"] .bg-secondary { background: rgba(139,92,246,0.22) !important; color: #c4b5fd !important; }
 [data-theme="dark"] .bg-info      { background: rgba(167,139,250,0.25) !important; color: #ddd6fe !important; }
-[data-theme="dark"] #login-view {
-  background:
-    radial-gradient(1000px 500px at 80% 0%, rgba(139,92,246,0.20), transparent 55%),
-    radial-gradient(800px 500px at 10% 100%, rgba(124,58,237,0.18), transparent 55%),
-    linear-gradient(160deg, #150e2e 0%, #1d1440 100%);
-}
-[data-theme="dark"] #login-view::before { background: radial-gradient(circle, #7c3aed, transparent 70%); opacity: 0.4; }
-[data-theme="dark"] #login-view::after  { background: radial-gradient(circle, #4c1d95, transparent 70%); opacity: 0.5; }
 
 /* ============================================================
    TABLAS — encabezado morado suave, filas que entran en cascada
@@ -522,7 +514,7 @@ nav.sidebar li:nth-child(8) .sidebar-link { animation-delay: 0.24s; }
 [data-theme="dark"] .alert-success { color: #d8caff !important; }
 
 /* ============================================================
-   LOGIN — fondo con auroras moradas y tarjeta flotante
+   LOGIN — panel de marca morado + tarjeta flotante blanca
    ============================================================ */
 #login-view {
   background:
@@ -531,6 +523,7 @@ nav.sidebar li:nth-child(8) .sidebar-link { animation-delay: 0.24s; }
     linear-gradient(160deg, #f6f4fb 0%, #ede7fb 100%);
   position: relative;
   overflow: hidden;
+  min-height: 100vh; min-height: 100dvh;
 }
 #login-view::before, #login-view::after {
   content: '';
@@ -547,19 +540,182 @@ nav.sidebar li:nth-child(8) .sidebar-link { animation-delay: 0.24s; }
   background: radial-gradient(circle, #7c3aed, transparent 70%);
   animation: auroraB 11s ease-in-out infinite;
 }
-#login-view .card {
-  border-radius: var(--r-xl) !important;
-  box-shadow: var(--shadow-3) !important;
-  border: 1px solid rgba(124,58,237,0.15) !important;
-  max-width: 400px; width: 100%;
+
+.login-shell {
   position: relative; z-index: 1;
-  animation: popIn 0.55s cubic-bezier(0.34,1.4,0.64,1), floatCard 5.5s ease-in-out 0.6s infinite;
+  min-height: 100vh; min-height: 100dvh;
+  display: flex; align-items: center; justify-content: center;
+  gap: 56px; padding: 24px;
+  max-width: 1200px; margin-inline: auto;
 }
-#login-view .card:hover { animation-play-state: running; }
+
+/* --- Panel de marca (desktop) --- */
+.login-brand {
+  flex-direction: column; align-items: flex-start;
+  width: min(430px, 42vw); padding: 44px 40px;
+  border-radius: 28px;
+  background: linear-gradient(160deg, #4c1d95 0%, #6d28d9 55%, #7c3aed 100%);
+  box-shadow: var(--shadow-3), inset 0 1px 0 rgba(255,255,255,0.18);
+  color: #fff; position: relative; overflow: hidden;
+  animation: brandIn 0.7s cubic-bezier(0.22,1,0.36,1) backwards;
+}
+@keyframes brandIn {
+  from { opacity: 0; transform: translateX(-36px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+.lb-glow { position: absolute; border-radius: 50%; filter: blur(50px); pointer-events: none; }
+.lb-glow-1 { width: 260px; height: 260px; top: -80px; right: -60px; background: rgba(221,214,254,0.35); animation: auroraA 9s ease-in-out infinite; }
+.lb-glow-2 { width: 300px; height: 300px; bottom: -110px; left: -90px; background: rgba(124,58,237,0.55); animation: auroraB 11s ease-in-out infinite; }
+
+.lb-logo {
+  width: 64px; height: 64px; border-radius: 18px;
+  display: grid; place-items: center; font-size: 30px; color: #4c1d95;
+  background: linear-gradient(135deg, #a78bfa, #ddd6fe);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.5);
+  margin-bottom: 22px; position: relative;
+  animation: logoGlow 3s ease-in-out infinite;
+}
+.login-brand h2 { font-size: 30px; font-weight: 800; letter-spacing: -0.6px; margin: 0 0 6px; position: relative; }
+.lb-sub { color: rgba(255,255,255,0.75); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; margin: 0 0 30px; position: relative; }
+
+.lb-features { list-style: none; padding: 0; margin: 0 0 34px; display: flex; flex-direction: column; gap: 16px; width: 100%; position: relative; }
+.lb-features li { display: flex; gap: 14px; align-items: center; animation: slideInLeft 0.55s ease backwards; }
+.lb-features li:nth-child(1) { animation-delay: 0.15s; }
+.lb-features li:nth-child(2) { animation-delay: 0.27s; }
+.lb-features li:nth-child(3) { animation-delay: 0.39s; }
+.lb-ico {
+  width: 42px; height: 42px; min-width: 42px; border-radius: 12px;
+  display: grid; place-items: center; font-size: 19px; color: #fff;
+  background: rgba(255,255,255,0.14);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22);
+}
+.lb-features strong { display: block; font-size: 14px; }
+.lb-features small { color: rgba(255,255,255,0.66); font-size: 11.5px; }
+.lb-foot { color: rgba(255,255,255,0.55); font-size: 11px; position: relative; }
+
+/* --- Tarjeta del formulario --- */
+.login-panel {
+  flex: 1; display: flex; justify-content: center;
+  max-width: 460px; width: 100%;
+  animation: popIn 0.6s cubic-bezier(0.34,1.4,0.64,1) 0.1s backwards;
+}
+.login-card {
+  width: 100%; max-width: 420px;
+  background: var(--surface);
+  border: 1px solid rgba(124,58,237,0.16);
+  border-radius: 26px;
+  padding: 38px 34px;
+  box-shadow: var(--shadow-3);
+  transition: transform var(--tr), box-shadow var(--tr);
+  animation: floatCard 6s ease-in-out 1s infinite;
+}
+.login-card:hover { box-shadow: var(--shadow-3); }
+.lc-logo {
+  width: 62px; height: 62px; margin: 0 auto; border-radius: 18px;
+  display: grid; place-items: center; font-size: 28px; color: #fff;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  box-shadow: var(--blue-shadow), inset 0 1px 0 rgba(255,255,255,0.35);
+  animation: logoGlow 3.2s ease-in-out infinite;
+}
+.lc-tagline { color: var(--text3); letter-spacing: 0.14em; text-transform: uppercase; font-size: 10px; font-weight: 700; }
+
+/* Inputs con ícono integrado */
+.input-icon { position: relative; }
+.input-icon > i {
+  position: absolute; left: 13px; top: 50%; translate: 0 -50%;
+  color: var(--text3); font-size: 14px; pointer-events: none;
+  transition: color var(--tr);
+}
+.input-icon .form-control { padding-left: 38px; }
+.input-icon:focus-within > i { color: var(--blue); }
+
+.pass-group .input-icon-flat {
+  display: grid; place-items: center; padding: 0 12px;
+  background: var(--input-bg); color: var(--text3); font-size: 14px;
+  border: 1.5px solid var(--border); border-right: none;
+  border-radius: var(--r-sm) 0 0 var(--r-sm);
+  transition: color var(--tr), border-color var(--tr);
+}
+.pass-group:focus-within .input-icon-flat { color: var(--blue); border-color: var(--blue); }
+.pass-group .form-control:focus { margin-left: -1.5px; }
+
+.lc-submit { padding: 11px; font-size: 14px; letter-spacing: 0.02em; border-radius: 12px !important; }
+.lc-hint { color: var(--text3); font-size: 11.5px; }
 #login-error.shake { animation: shakeX 0.45s ease; }
-#login-form .form-control:focus { box-shadow: 0 0 0 4px rgba(124,58,237,0.18), var(--shadow-2); }
-#toggle-password { border: 1.5px solid var(--border); }
-#toggle-password:hover { color: var(--blue); border-color: var(--blue); }
+
+@media (max-width: 991px) {
+  .login-panel { max-width: 420px; }
+}
+@media (max-width: 575px) {
+  .login-shell { padding: 16px; }
+  .login-card { padding: 30px 20px; border-radius: 20px; }
+}
+@media (max-height: 620px) {
+  .login-shell { align-items: flex-start; padding-top: 36px; }
+}
+
+[data-theme="dark"] #login-view {
+  background:
+    radial-gradient(1000px 500px at 80% 0%, rgba(139,92,246,0.20), transparent 55%),
+    radial-gradient(800px 500px at 10% 100%, rgba(124,58,237,0.18), transparent 55%),
+    linear-gradient(160deg, #150e2e 0%, #1d1440 100%);
+}
+[data-theme="dark"] #login-view::before { background: radial-gradient(circle, #7c3aed, transparent 70%); opacity: 0.4; }
+[data-theme="dark"] #login-view::after  { background: radial-gradient(circle, #4c1d95, transparent 70%); opacity: 0.5; }
+
+/* ============================================================
+   ANIMACIÓN DE ÉXITO AL INICIAR SESIÓN
+   ============================================================ */
+#login-success {
+  position: fixed; inset: 0; z-index: 3000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background:
+    radial-gradient(900px 520px at 50% 42%, rgba(124,58,237,0.18), transparent 60%),
+    var(--bg);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+}
+#login-success.ls-in  { animation: lsIn 0.35s ease forwards; }
+#login-success.ls-out { animation: lsOut 0.48s ease forwards; }
+@keyframes lsIn  { to { opacity: 1; } }
+@keyframes lsOut { to { opacity: 0; visibility: hidden; } }
+
+.ls-ring {
+  position: absolute; width: 340px; height: 340px; border-radius: 50%;
+  border: 2.5px solid rgba(139,92,246,0.55);
+  opacity: 0;
+}
+.ls-burst {
+  position: absolute; width: 130px; height: 130px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(139,92,246,0.40), transparent 65%);
+  opacity: 0;
+}
+.ls-check { width: 130px; height: 130px; margin-bottom: 16px; filter: drop-shadow(0 12px 32px rgba(109,40,217,0.45)); }
+.ls-check circle {
+  fill: none; stroke: #7c3aed; stroke-width: 7; stroke-linecap: round;
+  stroke-dasharray: 290; stroke-dashoffset: 290;
+  transform: rotate(-90deg); transform-origin: center;
+}
+.ls-check path {
+  fill: none; stroke: #8b5cf6; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 60; stroke-dashoffset: 60;
+}
+.ls-title { margin: 4px 0 0; font-weight: 800; letter-spacing: -0.3px; opacity: 0; }
+.ls-name  { color: var(--text2); font-weight: 600; margin: 0; opacity: 0; }
+
+#login-success.ls-in .ls-ring        { animation: ringExpand 1.5s cubic-bezier(0.22,1,0.36,1) forwards; }
+#login-success.ls-in .ls-burst       { animation: burstPop 0.95s ease-out 0.05s forwards; }
+#login-success.ls-in .ls-check circle{ animation: drawStroke 0.8s cubic-bezier(0.65,0,0.35,1) 0.15s forwards; }
+#login-success.ls-in .ls-check path  { animation: drawStroke 0.5s ease 0.85s forwards; }
+#login-success.ls-in .ls-check       { animation: checkPulse 0.5s cubic-bezier(0.34,1.56,0.64,1) 1s; }
+#login-success.ls-in .ls-title       { animation: titleUp 0.5s cubic-bezier(0.22,1,0.36,1) 1.05s forwards; }
+#login-success.ls-in .ls-name        { animation: titleUp 0.5s ease 1.2s forwards; }
+
+@keyframes ringExpand { 0% { opacity: 0.85; transform: scale(0.22); } 70% { opacity: 0.35; } 100% { opacity: 0; transform: scale(1.25); } }
+@keyframes burstPop   { 0% { opacity: 0; transform: scale(0.3); } 45% { opacity: 1; } 100% { opacity: 0; transform: scale(2.7); } }
+@keyframes drawStroke { to { stroke-dashoffset: 0; } }
+@keyframes checkPulse { 0% { transform: scale(1); } 45% { transform: scale(1.13); } 100% { transform: scale(1); } }
+@keyframes titleUp    { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
 /* ============================================================
    TOGGLE DE TEMA (sobre la barra morada)
@@ -802,7 +958,7 @@ body.menu-open .menu-toggle i { transform: rotate(90deg); }
 
   /* Alertas y login */
   .alert { font-size: 12px; }
-  #login-view .card { max-width: 100%; }
+  #login-view .login-card { max-width: 100%; }
 
   /* Evita el zoom automático de iOS Safari al enfocar inputs */
   .form-control, .form-select { font-size: 16px !important; }
