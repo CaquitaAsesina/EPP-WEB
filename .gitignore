@@ -6,16 +6,8 @@ node_modules/
 .env.*
 !.env.example
 
-# Config files with secrets
-config.json
-backend/config/config.json
-
 # Logs
 *.log
-server.log
-
-# Deployment scripts (local use only)
-deploy-aiven.js
 
 # Tool metadata
 .freebuff/

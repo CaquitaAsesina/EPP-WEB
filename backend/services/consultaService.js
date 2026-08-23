@@ -147,21 +147,6 @@ class ConsultaService {
     const sql = uniones.join(' UNION ALL ') + ' ORDER BY fecha DESC LIMIT 500';
     return db.query(sql);
   }
-
-  static async anularMovimiento(tipo, id, usuarioActual) {
-    // Delegar al service correspondiente
-    if (tipo === 'INGRESO') {
-      const IngresoService = require('./ingresoService');
-      return IngresoService.anular(id, usuarioActual);
-    } else if (tipo === 'ENTREGA') {
-      const EntregaService = require('./entregaService');
-      return EntregaService.anular(id, usuarioActual);
-    } else if (tipo === 'DEVOLUCIÓN') {
-      const DevolucionService = require('./devolucionService');
-      return DevolucionService.anular(id, usuarioActual);
-    }
-    throw new Error('Tipo de movimiento no anulable');
-  }
 }
 
 module.exports = ConsultaService;

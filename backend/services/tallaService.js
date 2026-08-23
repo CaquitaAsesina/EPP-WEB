@@ -31,10 +31,6 @@ class TallaService {
     return db.query(`SELECT * FROM tallas ORDER BY orden`);
   }
 
-  static async obtenerPorId(id) {
-    return db.fetchone(`SELECT * FROM tallas WHERE id = ?`, [id]);
-  }
-
   static async crear({ nombre, orden }, usuarioActual) {
     requireField(nombre, 'Nombre');
     const result = await db.execute(

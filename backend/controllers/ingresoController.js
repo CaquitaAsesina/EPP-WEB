@@ -13,16 +13,6 @@ class IngresoController {
     }
   }
 
-  static async obtenerPorId(req, res) {
-    try {
-      const ingreso = await IngresoService.obtenerPorId(req.params.id);
-      if (!ingreso) return res.status(404).json({ error: 'Ingreso no encontrado' });
-      res.json(ingreso);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
-
   static async crear(req, res) {
     try {
       const result = await IngresoService.crear(req.body, req.user);

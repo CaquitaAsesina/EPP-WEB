@@ -6,8 +6,6 @@ services:
     buildCommand: npm install
     startCommand: node backend/server.js
     envVars:
-      - key: DB_MODE
-        value: cloud
       - key: DB_HOST
         sync: false  # Set in Render dashboard
       - key: DB_PORT

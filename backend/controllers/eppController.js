@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 // Controller: EPP
 // ============================================================
 const EppService = require('../services/eppService');
@@ -8,16 +8,6 @@ class EppController {
     try {
       const todos = req.query.todos === '1';
       const epp = todos ? await EppService.listarTodos() : await EppService.listarActivos();
-      res.json(epp);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
-
-  static async obtenerPorId(req, res) {
-    try {
-      const epp = await EppService.obtenerPorId(req.params.id);
-      if (!epp) return res.status(404).json({ error: 'EPP no encontrado' });
       res.json(epp);
     } catch (err) {
       res.status(500).json({ error: err.message });

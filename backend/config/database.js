@@ -38,7 +38,7 @@ async function getPool() {
     // Verificar conexión
     const conn = await pool.getConnection();
     conn.release();
-    const mode = config.dbMode === 'cloud' ? '☁️ Cloud (Aiven)' : '🏠 Local';
+    const mode = '☁️ Cloud (Aiven)';
     console.log(`✅ Conectado a MySQL [${mode}]: ${config.database}@${config.host}:${config.port}`);
     return pool;
   } catch (err) {

@@ -23,16 +23,6 @@ class TrabajadorController {
     }
   }
 
-  static async obtenerPorId(req, res) {
-    try {
-      const trabajador = await TrabajadorService.obtenerPorId(req.params.id);
-      if (!trabajador) return res.status(404).json({ error: 'Trabajador no encontrado' });
-      res.json(trabajador);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
-
   static async crear(req, res) {
     try {
       const result = await TrabajadorService.crear(req.body, req.user);

@@ -13,15 +13,6 @@ class PeriodoController {
     }
   }
 
-  static async activo(req, res) {
-    try {
-      const periodo = await PeriodoService.activo();
-      res.json(periodo || { message: 'No hay período activo' });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
-
   static async crear(req, res) {
     try {
       const result = await PeriodoService.crear(req.body, req.user);

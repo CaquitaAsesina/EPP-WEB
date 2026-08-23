@@ -12,10 +12,6 @@ class PeriodoService {
     return db.query(`SELECT * FROM periodos ORDER BY fecha DESC`);
   }
 
-  static async activo() {
-    return db.fetchone(`SELECT * FROM periodos WHERE activo = 1 ORDER BY fecha DESC LIMIT 1`);
-  }
-
   static async crear({ fecha }, usuarioActual) {
     if (!fecha) throw new ValidationError('La fecha es obligatoria');
     // Desactivar el período activo anterior

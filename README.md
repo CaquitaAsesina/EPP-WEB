@@ -63,7 +63,7 @@ inventario-epp/
 ### Requisitos
 
 - Node.js 20+
-- MySQL 8.0+ (local o Aiven Cloud)
+- MySQL 8 (servicio cloud en [Aiven](https://aiven.io))
 
 ### Paso 1: Clonar el repositorio
 
@@ -83,17 +83,7 @@ npm install
 Copia `.env.example` como `.env` y configura:
 
 ```env
-# Modo: cloud (Aiven) o local (MySQL)
-DB_MODE=local
-
-# Local MySQL
-LOCAL_DB_HOST=localhost
-LOCAL_DB_PORT=3306
-LOCAL_DB_USER=root
-LOCAL_DB_PASSWORD=tu_password
-LOCAL_DB_NAME=inventario_epp
-
-# Aiven Cloud (solo si DB_MODE=cloud)
+# Aiven Cloud MySQL
 DB_HOST=tu-host.aivencloud.com
 DB_PORT=26056
 DB_USER=avnadmin
@@ -127,24 +117,24 @@ El servidor arranca en `http://localhost:3000`. Las tablas y datos iniciales se 
 
 ---
 
-## ☁️ Deploy en Render + Aiven
+## ☁️ Deploy: GitHub → Aiven → Render
 
-### 1. Base de datos (Aiven)
+### 1. Sube el código a GitHub
+
+### 2. Base de datos (Aiven Console)
 
 1. Crea una cuenta en [Aiven Console](https://console.aiven.io)
 2. Crea un servicio MySQL
 3. Copia las credenciales de conexión
 
-### 2. Aplicación (Render)
+### 3. Aplicación (Render)
 
-1. Sube el código a GitHub
-2. En [Render](https://render.com), crea un **New Web Service**
-3. Conecta tu repositorio GitHub
-4. Configura las variables de entorno:
+1. En [Render](https://render.com), crea un **New Web Service**
+2. Conecta tu repositorio GitHub
+3. Configura las variables de entorno:
 
 | Variable | Valor |
 |----------|-------|
-| `DB_MODE` | `cloud` |
 | `DB_HOST` | *(host de Aiven)* |
 | `DB_PORT` | `26056` |
 | `DB_USER` | `avnadmin` |
@@ -153,7 +143,7 @@ El servidor arranca en `http://localhost:3000`. Las tablas y datos iniciales se 
 | `DB_SSL` | `true` |
 | `JWT_SECRET` | *(genera uno aleatorio)* |
 
-5. Deploy automático
+4. Deploy automático
 
 ---
 

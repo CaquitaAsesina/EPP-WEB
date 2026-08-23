@@ -32,10 +32,6 @@ class EppService {
     return db.query(`SELECT * FROM epp ORDER BY id`);
   }
 
-  static async obtenerPorId(id) {
-    return db.fetchone(`SELECT * FROM epp WHERE id = ?`, [id]);
-  }
-
   // Trae todas las tallas de todos los EPP en UNA sola consulta
   static async tallasPorEpp() {
     const rows = await db.query(`

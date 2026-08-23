@@ -126,7 +126,6 @@ const API = {
     const params = new URLSearchParams(filtros).toString();
     return this.request('GET', `/consultas?${params}`);
   },
-  async anularMovimientoConsulta(tipo, id) { return this.request('POST', '/consultas/anular', { tipo, id }); },
 
   // ---- Reportes PDF ----
   async downloadPdf(endpoint, params = {}) {

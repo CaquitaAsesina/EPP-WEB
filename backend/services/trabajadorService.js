@@ -45,10 +45,6 @@ class TrabajadorService {
     );
   }
 
-  static async obtenerPorId(id) {
-    return db.fetchone(`SELECT * FROM trabajadores WHERE id = ?`, [id]);
-  }
-
   static async generarCodigo() {
     const last = await db.fetchone(`SELECT codigo FROM trabajadores ORDER BY id DESC LIMIT 1`);
     if (!last || !last.codigo) return 'TRAB-001';

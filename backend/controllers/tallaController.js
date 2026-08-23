@@ -14,16 +14,6 @@ class TallaController {
     }
   }
 
-  static async obtenerPorId(req, res) {
-    try {
-      const talla = await TallaService.obtenerPorId(req.params.id);
-      if (!talla) return res.status(404).json({ error: 'Talla no encontrada' });
-      res.json(talla);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
-
   static async crear(req, res) {
     try {
       const result = await TallaService.crear(req.body, req.user);

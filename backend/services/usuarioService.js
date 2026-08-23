@@ -44,10 +44,6 @@ class UsuarioService {
     return db.query(`SELECT id, nombre, username, rol, estado, creado_el FROM usuarios ORDER BY id`);
   }
 
-  static async obtenerPorId(id) {
-    return db.fetchone(`SELECT id, nombre, username, rol, estado, creado_el FROM usuarios WHERE id = ?`, [id]);
-  }
-
   static async crear({ nombre, username, password, rol }, usuarioActual) {
     requireField(nombre, 'Nombre');
     requireField(username, 'Usuario');

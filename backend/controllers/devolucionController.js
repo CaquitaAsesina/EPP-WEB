@@ -13,16 +13,6 @@ class DevolucionController {
     }
   }
 
-  static async obtenerPorId(req, res) {
-    try {
-      const devolucion = await DevolucionService.obtenerPorId(req.params.id);
-      if (!devolucion) return res.status(404).json({ error: 'Devolución no encontrada' });
-      res.json(devolucion);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
-
   static async crear(req, res) {
     try {
       const result = await DevolucionService.crear(req.body, req.user);

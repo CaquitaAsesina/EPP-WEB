@@ -13,16 +13,6 @@ class EntregaController {
     }
   }
 
-  static async obtenerPorId(req, res) {
-    try {
-      const entrega = await EntregaService.obtenerPorId(req.params.id);
-      if (!entrega) return res.status(404).json({ error: 'Entrega no encontrada' });
-      res.json(entrega);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
-
   static async crear(req, res) {
     try {
       const result = await EntregaService.crear(req.body, req.user);
