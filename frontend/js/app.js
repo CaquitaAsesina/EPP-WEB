@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLogin();
   initNav();
   initMobileMenu();
+  initSidebarCollapse();
   initConfigTabs();
   initFilters();
   initActionButtons();
@@ -232,6 +233,31 @@ function syncMenuIcon() {
   const i = document.querySelector('#menu-toggle i');
   if (!i) return;
   i.className = document.body.classList.contains('menu-open') ? 'bi bi-x-lg' : 'bi bi-list';
+}
+
+function initSidebarCollapse() {
+  document.querySelectorAll('.sidebar-link').forEach(l => { l.title = l.textContent.trim(); });
+  const btn = document.getElementById('btn-collapse-sidebar');
+  if (!btn) return;
+  if (localStorage.getItem('epp_sb_collapsed') === '1') document.body.classList.add('sidebar-collapsed');
+  syncCollapseIcon();
+  btn.addEventListener('click', () => {
+    const off = !document.body.classList.toggle('sidebar-collapsed');
+    localStorage.setItem('epp_sb_collapsed', off ? '0' : '1');
+    syncCollapseIcon();
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth < 992) return;
+    syncCollapseIcon();
+  });
+}
+
+function syncCollapseIcon() {
+  const i = document.querySelector('#btn-collapse-sidebar i');
+  const collapsed = document.body.classList.contains('sidebar-collapsed');
+  if (i) i.className = collapsed ? 'bi bi-chevron-double-right' : 'bi bi-chevron-double-left';
+  const b = document.getElementById('btn-collapse-sidebar');
+  if (b) b.title = collapsed ? 'Mostrar menú' : 'Ocultar menú';
 }
 
 function navigateTo(view) {

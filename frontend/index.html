@@ -67,6 +67,7 @@
             <small style="color:rgba(255,255,255,.5);font-size:9px">Sistema de Protección Personal</small>
           </div>
         </div>
+        <button class="collapse-toggle" id="btn-collapse-sidebar" title="Ocultar menú"><i class="bi bi-chevron-double-left"></i></button>
         <button class="theme-toggle" id="theme-toggle" title="Cambiar tema"><i class="bi bi-moon-stars"></i></button>
       </div>
       <hr class="border-secondary my-1">
@@ -255,8 +256,8 @@
               <div class="col-lg-2 col-md-4 col-sm-6"><label class="form-label"><i class="bi bi-tag me-1"></i>EPP</label><select class="form-select form-select-sm" id="filtro-cons-epp"><option value="">Todos</option></select></div>
               <div class="col-lg-2 col-md-4 col-sm-6"><label class="form-label"><i class="bi bi-rulers me-1"></i>Talla</label><select class="form-select form-select-sm" id="filtro-cons-talla"><option value="">Todas</option></select></div>
               <div class="col-lg-2 col-md-4 col-sm-6"><label class="form-label"><i class="bi bi-person-badge me-1"></i>Trabajador</label><select class="form-select form-select-sm" id="filtro-cons-trabajador"><option value="">Todos</option></select></div>
-              <div class="col-lg-1 col-md-3 col-sm-6"><label class="form-label"><i class="bi bi-calendar me-1"></i>Desde</label><input type="date" class="form-control form-control-sm" id="filtro-cons-desde"></div>
-              <div class="col-lg-1 col-md-3 col-sm-6"><label class="form-label"><i class="bi bi-calendar-check me-1"></i>Hasta</label><input type="date" class="form-control form-control-sm" id="filtro-cons-hasta"></div>
+              <div class="col-lg-2 col-md-3 col-sm-6"><label class="form-label"><i class="bi bi-calendar me-1"></i>Desde</label><input type="date" class="form-control form-control-sm" id="filtro-cons-desde"></div>
+              <div class="col-lg-2 col-md-3 col-sm-6"><label class="form-label"><i class="bi bi-calendar-check me-1"></i>Hasta</label><input type="date" class="form-control form-control-sm" id="filtro-cons-hasta"></div>
               <div class="col-lg-2 col-md-4 col-sm-6"><label class="form-label"><i class="bi bi-calendar-event me-1"></i>Período</label><select class="form-select form-select-sm" id="filtro-cons-periodo"><option value="">Todos</option></select></div>
               <div class="col-lg-2 col-md-3 col-sm-6 d-flex align-items-end"><button class="btn btn-primary btn-sm w-100" id="btn-buscar-consulta"><i class="bi bi-search me-1"></i>Buscar</button></div>
             </div>
@@ -343,7 +344,7 @@
 
 <!-- MODAL GENÉRICO -->
 <div class="modal fade" id="modal-generico" tabindex="-1">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header"><h5 class="modal-title fw-bold" id="modal-title">Título</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
       <div class="modal-body" id="modal-body"></div>
