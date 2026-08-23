@@ -39,6 +39,11 @@ const API = {
     }
 
     const response = await fetch(url, options);
+    if (response.status === 401 && !endpoint.includes('/auth/login')) {
+      this.clearToken();
+      location.reload();
+      return new Promise(() => {});
+    }
     const json = await response.json();
     if (!response.ok) {
       throw new Error(json.error || 'Error de servidor');

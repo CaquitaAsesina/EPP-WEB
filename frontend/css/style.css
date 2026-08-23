@@ -192,7 +192,7 @@ body {
   position: sticky; top: 0;
   height: 100vh; height: 100dvh;
   overflow-y: auto; overflow-x: hidden;
-  z-index: 100;
+  z-index: 1050;
   box-shadow: 6px 0 24px rgba(59,7,100,0.28);
   transition: width var(--tr), min-width var(--tr), box-shadow var(--tr);
 }
@@ -218,14 +218,14 @@ body {
   position: relative;
   animation: slideInLeft 0.4s ease backwards;
 }
-.sidebar-link:nth-child(1) { animation-delay: 0.03s; }
-.sidebar-link:nth-child(2) { animation-delay: 0.06s; }
-.sidebar-link:nth-child(3) { animation-delay: 0.09s; }
-.sidebar-link:nth-child(4) { animation-delay: 0.12s; }
-.sidebar-link:nth-child(5) { animation-delay: 0.15s; }
-.sidebar-link:nth-child(6) { animation-delay: 0.18s; }
-.sidebar-link:nth-child(7) { animation-delay: 0.21s; }
-.sidebar-link:nth-child(8) { animation-delay: 0.24s; }
+nav.sidebar li:nth-child(1) .sidebar-link { animation-delay: 0.03s; }
+nav.sidebar li:nth-child(2) .sidebar-link { animation-delay: 0.06s; }
+nav.sidebar li:nth-child(3) .sidebar-link { animation-delay: 0.09s; }
+nav.sidebar li:nth-child(4) .sidebar-link { animation-delay: 0.12s; }
+nav.sidebar li:nth-child(5) .sidebar-link { animation-delay: 0.15s; }
+nav.sidebar li:nth-child(6) .sidebar-link { animation-delay: 0.18s; }
+nav.sidebar li:nth-child(7) .sidebar-link { animation-delay: 0.21s; }
+nav.sidebar li:nth-child(8) .sidebar-link { animation-delay: 0.24s; }
 .sidebar-link:hover {
   background: var(--sidebar-hover);
   color: var(--text-sidebar-active) !important;
@@ -272,10 +272,16 @@ body {
   transition: transform var(--tr), box-shadow var(--tr), border-color var(--tr);
   overflow: hidden;
 }
+/* El lift (elevación) SOLO en tarjetas pequeñas interactivas; los paneles
+   grandes (tablas/filtros) solo profundizan su sombra, sin moverse. */
 .card:hover {
-  transform: translateY(-3px);
   box-shadow: var(--shadow-2);
   border-color: rgba(124,58,237,0.25);
+}
+#dashboard-epp-cards .card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-3);
+  border-color: rgba(124,58,237,0.40);
 }
 
 .stat-card {
@@ -348,6 +354,18 @@ body {
 [data-theme="dark"] .btn-outline-danger   { color: #ddd6fe !important; border-color: #a78bfa !important; }
 [data-theme="dark"] .btn-outline-warning  { color: #d8b4fe !important; border-color: #c084fc !important; }
 [data-theme="dark"] .btn-outline-success  { color: #c4b5fd !important; border-color: #8b5cf6 !important; }
+
+/* Modo oscuro: chips translúcidas y login nocturno */
+[data-theme="dark"] .bg-secondary { background: rgba(139,92,246,0.22) !important; color: #c4b5fd !important; }
+[data-theme="dark"] .bg-info      { background: rgba(167,139,250,0.25) !important; color: #ddd6fe !important; }
+[data-theme="dark"] #login-view {
+  background:
+    radial-gradient(1000px 500px at 80% 0%, rgba(139,92,246,0.20), transparent 55%),
+    radial-gradient(800px 500px at 10% 100%, rgba(124,58,237,0.18), transparent 55%),
+    linear-gradient(160deg, #150e2e 0%, #1d1440 100%);
+}
+[data-theme="dark"] #login-view::before { background: radial-gradient(circle, #7c3aed, transparent 70%); opacity: 0.4; }
+[data-theme="dark"] #login-view::after  { background: radial-gradient(circle, #4c1d95, transparent 70%); opacity: 0.5; }
 
 /* ============================================================
    TABLAS — encabezado morado suave, filas que entran en cascada
@@ -461,6 +479,7 @@ body {
 .modal-body { padding: 20px; color: var(--text); }
 .modal-footer { padding: 12px 20px; }
 .modal-backdrop { background: rgba(30,10,70,0.40) !important; backdrop-filter: blur(6px); }
+#confirm-text, #alerta-text { white-space: pre-line; }
 
 /* ============================================================
    PESTAÑAS DE CONFIGURACIÓN
@@ -562,6 +581,9 @@ body {
 .btn .spinner-border { animation: pulse 1s ease infinite; }
 
 h4[style*="--blue"], h4.fw-bold { letter-spacing: -0.3px; }
+/* Título e ícono siempre alineados aunque el texto envuelva */
+h4.fw-bold { display: flex; align-items: center; }
+h4.fw-bold i { font-size: 1.05em; flex-shrink: 0; }
 h4 i { filter: drop-shadow(0 2px 4px rgba(124,58,237,0.30)); }
 
 .form-select-sm, .form-control-sm { border-radius: 8px !important; }
@@ -602,6 +624,20 @@ h4 i { filter: drop-shadow(0 2px 4px rgba(124,58,237,0.30)); }
 }
 
 /* ============================================================
+   IMPRESIÓN — solo tablas y títulos
+   ============================================================ */
+@media print {
+  .sidebar, .menu-toggle, #sidebar-overlay, .collapse-toggle, .theme-toggle,
+  .btn, .alert, .nav-tabs, .form-select, .form-control, .input-group,
+  #stock-warning { display: none !important; }
+  body { background: #fff !important; }
+  #app-main .content-area > div { padding: 0 !important; max-width: none !important; }
+  .card { box-shadow: none !important; border: 1px solid #d8d4e8 !important; break-inside: avoid; }
+  .table th { background: #f0ecfa !important; color: #000 !important; }
+  .table tbody tr { animation: none !important; }
+}
+
+/* ============================================================
    MOVIMIENTO REDUCIDO
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
@@ -610,6 +646,12 @@ h4 i { filter: drop-shadow(0 2px 4px rgba(124,58,237,0.30)); }
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* En pantallas táctiles el :hover se queda pegado: sin elevaciones */
+@media (hover: none) {
+  .stat-card:hover,
+  #dashboard-epp-cards .card:hover { transform: none; }
 }
 
 /* ============================================================
@@ -712,9 +754,11 @@ body.menu-open .menu-toggle i { transform: rotate(90deg); }
     box-shadow: 26px 0 60px rgba(30,10,70,0.45);
   }
   body.menu-open #sidebar-overlay { opacity: 1; pointer-events: auto; }
+  body.menu-open { overflow: hidden; }
 
-  /* Restaurar textos dentro del cajón */
-  .sidebar span, .sidebar small, .sidebar h6, #user-role { display: inline !important; }
+  /* Restaurar SOLO los textos funcionales; la marca conserva su display propio */
+  .sidebar-link span { display: inline !important; }
+  #user-name, #user-role { display: inline !important; }
   .sidebar .btn { display: inline-flex !important; }
   .sidebar-link { justify-content: flex-start; padding: 9px 14px; margin: 2px 10px; gap: 10px; }
 
@@ -727,8 +771,7 @@ body.menu-open .menu-toggle i { transform: rotate(90deg); }
   h4.fw-bold i { font-size: 16px; }
   .stat-number { font-size: 23px; }
 
-  /* Botones de las barras de herramientas reparten el ancho */
-  .d-flex.flex-wrap.gap-2 > .btn { flex: 1 1 auto; justify-content: center; }
+  /* Los botones envuelven de forma natural (flex-wrap de Bootstrap); solo el select toma su propia línea */
   .d-flex.flex-wrap.gap-2 > .form-select { width: 100% !important; flex: 1 1 150px; }
 }
 
@@ -736,12 +779,11 @@ body.menu-open .menu-toggle i { transform: rotate(90deg); }
   body { font-size: 12.5px; }
 
   h4.fw-bold { font-size: 16.5px; }
-  h4.fw-bold.me-2, h4.fw-bold i { font-size: 15px; }
+  h4.fw-bold i { font-size: 15px; }
   .stat-number { font-size: 20px; letter-spacing: -0.3px; }
   .stat-label { font-size: 9.5px; }
 
-  /* Botones apilados en dos columnas */
-  .d-flex.flex-wrap.gap-2 > .btn { flex: 1 1 calc(50% - 4px); font-size: 11.5px; padding: 6px 8px; }
+  /* Botones compactos pero con su tamaño natural (sin estiramientos forzados) */
   .btn-sm { padding: 6px 10px; font-size: 11.5px; }
 
   /* Tablas compactas con scroll horizontal */

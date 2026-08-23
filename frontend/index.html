@@ -51,12 +51,12 @@
 
 <!-- ============ APP ============ -->
 <div id="app-main" class="d-none">
-  <button class="menu-toggle" id="menu-toggle" title="Menú"><i class="bi bi-list"></i></button>
+  <button class="menu-toggle" id="menu-toggle" title="Menú" aria-expanded="false" aria-controls="sidebar"><i class="bi bi-list"></i></button>
   <div id="sidebar-overlay"></div>
   <div class="d-flex" style="min-height:100vh">
 
     <!-- SIDEBAR -->
-    <nav id="sidebar" class="sidebar d-flex flex-column p-3">
+    <nav id="sidebar" class="sidebar d-flex flex-column p-3" aria-label="Menú principal">
       <div class="d-flex align-items-center justify-content-between mb-3 px-1">
         <div class="d-flex align-items-center gap-2">
           <div class="app-logo">
@@ -345,7 +345,7 @@
 <!-- MODAL GENÉRICO -->
 <div class="modal fade" id="modal-generico" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-content" aria-labelledby="modal-title">
       <div class="modal-header"><h5 class="modal-title fw-bold" id="modal-title">Título</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
       <div class="modal-body" id="modal-body"></div>
       <div class="modal-footer"><button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i>Cancelar</button><button type="button" class="btn btn-primary btn-sm" id="modal-submit"><i class="bi bi-check-lg me-1"></i>Guardar</button></div>
@@ -366,7 +366,7 @@
 <!-- MODAL CONFIRMAR -->
 <div class="modal fade" id="modal-confirmar" tabindex="-1">
   <div class="modal-dialog modal-sm modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-content" aria-labelledby="confirm-title">
       <div class="modal-body text-center py-4">
         <div id="confirm-icon" style="font-size:2.5rem;margin-bottom:8px">⚠️</div>
         <h6 class="fw-bold mb-1" id="confirm-title">Confirmar</h6>
@@ -383,7 +383,7 @@
 <!-- MODAL ALERTA -->
 <div class="modal fade" id="modal-alerta" tabindex="-1">
   <div class="modal-dialog modal-sm modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-content" aria-labelledby="alerta-title">
       <div class="modal-body text-center py-4">
         <div id="alerta-icon" style="font-size:2.5rem;margin-bottom:8px">ℹ️</div>
         <h6 class="fw-bold mb-1" id="alerta-title">Información</h6>

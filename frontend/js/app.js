@@ -42,11 +42,11 @@ function showConfirm(msg, title, btnText, icon) {
     m.querySelector('#confirm-text').textContent = msg;
     const okBtn = m.querySelector('#confirm-ok');
     okBtn.textContent = btnText || 'Eliminar';
-    const modal = new bootstrap.Modal(m);
+    const modal = bootstrap.Modal.getOrCreateInstance(m);
     let done = false;
     const finish = r => { if (!done) { done = true; modal.hide(); resolve(r); } };
     okBtn.onclick = () => finish(true);
-    m.addEventListener('hidden.bs.modal', () => finish(false), { once: true });
+    m.addEventListener('hidden.bs.modal', () => { modal.dispose(); finish(false); }, { once: true });
     modal.show();
   });
 }
@@ -58,7 +58,7 @@ function showAlert(msg, title, icon) {
     m.querySelector('#alerta-icon').textContent = icon || 'ℹ️';
     m.querySelector('#alerta-title').textContent = title || 'Información';
     m.querySelector('#alerta-text').textContent = msg;
-    const modal = new bootstrap.Modal(m);
+    const modal = bootstrap.Modal.getOrCreateInstance(m);
     m.addEventListener('hidden.bs.modal', () => { modal.dispose(); resolve(); }, { once: true });
     modal.show();
   });
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showAlert(err.message, 'Error', '❌');
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Guardar';
+      btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Guardar';
       _formCb = null;
     }
   });
@@ -164,6 +164,9 @@ function initLogin() {
   document.getElementById('login-form')?.addEventListener('submit', async e => {
     e.preventDefault();
     const errDiv = document.getElementById('login-error');
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Ingresando...';
     try {
       errDiv.classList.add('d-none');
       const r = await API.login(v('login-username'), v('login-password'));
@@ -173,6 +176,12 @@ function initLogin() {
     } catch (err) {
       errDiv.textContent = err.message;
       errDiv.classList.remove('d-none');
+      errDiv.classList.remove('shake');
+      void errDiv.offsetWidth;
+      errDiv.classList.add('shake');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión';
     }
   });
 
@@ -225,6 +234,7 @@ function initMobileMenu() {
   btn.addEventListener('click', () => { document.body.classList.toggle('menu-open'); syncMenuIcon(); });
   document.getElementById('sidebar-overlay')?.addEventListener('click', closeMobileMenu);
   window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeMobileMenu(); });
+  window.addEventListener('keydown', ev => { if (ev.key === 'Escape') closeMobileMenu(); });
 }
 
 function closeMobileMenu() { document.body.classList.remove('menu-open'); syncMenuIcon(); }
@@ -232,7 +242,9 @@ function closeMobileMenu() { document.body.classList.remove('menu-open'); syncMe
 function syncMenuIcon() {
   const i = document.querySelector('#menu-toggle i');
   if (!i) return;
-  i.className = document.body.classList.contains('menu-open') ? 'bi bi-x-lg' : 'bi bi-list';
+  const open = document.body.classList.contains('menu-open');
+  i.className = open ? 'bi bi-x-lg' : 'bi bi-list';
+  document.getElementById('menu-toggle')?.setAttribute('aria-expanded', open);
 }
 
 function initSidebarCollapse() {
@@ -292,7 +304,7 @@ async function loadView(view) {
     else if (view === 'consultas') await loadConsultas();
     else if (view === 'trabajadores') await loadTrabajadores();
     else if (view === 'configuracion') await loadConfig();
-  } catch (e) { console.error('loadView ' + view, e); }
+  } catch (e) { console.error('loadView ' + view, e); showAlert(e.message || 'Error al cargar los datos', 'Error', '❌'); }
 }
 
 // ---- Periodo selects ----
@@ -426,10 +438,7 @@ function fillEppSelects() {
     const s = document.getElementById(id);
     if (!s) return;
     const cur = s.value;
-    s.innerHTML = '<option value="">EPP</option>';
-    eppList.filter(e => e.estado === 'ACTIVO').forEach(e => {
-      s.innerHTML += `<option value="${e.id}">${e.nombre}</option>`;
-    });
+    s.innerHTML = '<option value="">EPP</option>' + eppList.filter(e => e.estado === 'ACTIVO').map(e => `<option value="${e.id}">${e.nombre}</option>`).join('');
     s.value = cur;
   });
 }
@@ -438,10 +447,7 @@ function fillTallaSelects() {
     const s = document.getElementById(id);
     if (!s) return;
     const cur = s.value;
-    s.innerHTML = '<option value="">Talla</option>';
-    tallasList.filter(t => t.estado === 'ACTIVO').forEach(t => {
-      s.innerHTML += `<option value="${t.id}">${t.nombre}</option>`;
-    });
+    s.innerHTML = '<option value="">Talla</option>' + tallasList.filter(t => t.estado === 'ACTIVO').map(t => `<option value="${t.id}">${t.nombre}</option>`).join('');
     s.value = cur;
   });
 }
@@ -450,10 +456,7 @@ function fillTrabSelects() {
     const s = document.getElementById(id);
     if (!s) return;
     const cur = s.value;
-    s.innerHTML = '<option value="">Trabajador</option>';
-    trabajadoresList.filter(t => t.estado === 'ACTIVO').forEach(t => {
-      s.innerHTML += `<option value="${t.id}">${t.nombre}</option>`;
-    });
+    s.innerHTML = '<option value="">Trabajador</option>' + trabajadoresList.filter(t => t.estado === 'ACTIVO').map(t => `<option value="${t.id}">${t.nombre}</option>`).join('');
     s.value = cur;
   });
 }
@@ -1190,7 +1193,7 @@ function downloadExcel(endpoint, periodo) {
   a.href = url;
   const token = API.token;
   fetch(url, { headers: { Authorization: 'Bearer ' + token } })
-    .then(r => r.blob())
+    .then(r => { if (!r.ok) throw new Error('Error generando Excel'); return r.blob(); })
     .then(blob => {
       a.href = URL.createObjectURL(blob);
       a.download = 'reporte_' + (periodo || 'todos') + '.csv';
