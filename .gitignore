@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Config files with secrets
+config.json
+backend/config/config.json
+
+# Logs
+*.log
+server.log
+
+# Deployment scripts (local use only)
+deploy-aiven.js
+
+# Tool metadata
+.freebuff/
+
+# Private keys / certificates
+*.pem
+*.key
+*.p12
+*.pfx
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Build
+dist/
+build/
