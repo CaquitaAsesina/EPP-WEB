@@ -14,22 +14,27 @@ class PeriodoService {
 
   static async crear({ fecha }, usuarioActual) {
     if (!fecha) throw new ValidationError('La fecha es obligatoria');
-    // Desactivar el período activo anterior
-    await db.execute(`UPDATE periodos SET activo = 0`);
 
-    // Crear nuevo período activo
-    const result = await db.execute(
-      `INSERT INTO periodos (fecha, activo) VALUES (?, 1)`,
-      [fecha]
-    );
+    const existente = await db.fetchone(`SELECT id FROM periodos WHERE fecha = ?`, [fecha]);
+    if (existente) throw new ValidationError('Ya existe un período con la fecha seleccionada');
 
-    if (usuarioActual) {
-      await db.query(
-        `INSERT INTO auditoria (usuario_id, usuario_nombre, accion, tabla, registro_id, datos_nuevos) VALUES (?, ?, 'INSERT', 'periodos', ?, ?)`,
-        [usuarioActual.id, usuarioActual.nombre, result.insertId, JSON.stringify({ fecha, activo: 1 })]
+    // Transacción: el nuevo período se crea activo y se desactivan los demás.
+    // Si algo falla, no se altera el estado actual.
+    return db.transaction(async conn => {
+      const [result] = await conn.execute(
+        `INSERT INTO periodos (fecha, activo) VALUES (?, 1)`,
+        [fecha]
       );
-    }
-    return { id: result.insertId };
+      await conn.execute(`UPDATE periodos SET activo = 0 WHERE id != ?`, [result.insertId]);
+
+      if (usuarioActual) {
+        await conn.query(
+          `INSERT INTO auditoria (usuario_id, usuario_nombre, accion, tabla, registro_id, datos_nuevos) VALUES (?, ?, 'INSERT', 'periodos', ?, ?)`,
+          [usuarioActual.id, usuarioActual.nombre, result.insertId, JSON.stringify({ fecha, activo: 1 })]
+        );
+      }
+      return { id: result.insertId };
+    });
   }
 
   static async eliminar(id, usuarioActual) {
